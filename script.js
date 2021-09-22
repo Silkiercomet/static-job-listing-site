@@ -1,5 +1,5 @@
-let father = document.querySelector("main")
-
+let father = document.querySelector("main"),
+tagsHeader = document.querySelector(".selected--tags")
 async function fetchData(){
     try{
         let response = await fetch(`data.json`);
@@ -11,26 +11,25 @@ async function fetchData(){
 
 const addTag = () => {
   let newTag = document.createElement("li"),
-  newBtn = document.createElement("button"),
-  tagsHeader = document.querySelector(".selected--tags")
-
+  newBtn = document.createElement("button")
+  
   return function(x){
     newTag.classList.add("tag")
     newBtn.classList.add("btn")
     newTag.textContent = x
     newBtn.textContent = 'X'
     newTag.appendChild(newBtn)
-    
+    tagsHeader.style.display = 'flex'
     tagsHeader.appendChild(newTag)
   }
-   
+
 }
 
 const removeContent = (x,y,z) => {
   for(let i = 0; i < y; i++){
     (document.querySelectorAll(x)[i].innerHTML == "false")? document.querySelectorAll(x)[i].style.display = 'none' : document.querySelectorAll(x)[i].innerHTML = z
   }
-  
+
 };
 
 
@@ -38,7 +37,7 @@ let data = fetchData().then( a => {
     a.forEach(element => {
        // console.log(element.company)
        let newSection = document.createElement("section")
-       
+
 
        newSection.classList.add("jobitem--card")
        newSection.innerHTML = `
@@ -63,8 +62,9 @@ let data = fetchData().then( a => {
 
         </menu>
        `
-       
+
       father.appendChild(newSection)
+      //adding the tags to the sections
       element.languages.map(language => {
         let newEntry = document.createElement("li"),
         tagsSection = document.querySelectorAll(".tags")
@@ -78,23 +78,59 @@ let data = fetchData().then( a => {
 
 })
 
-
+//the sort function for the selected tags
 setTimeout(function(){
+  let query = []
   document.querySelectorAll(".tag").forEach(tag => {
     tag.addEventListener("click",function(){
-      let sons = document.querySelectorAll(".jobitem--card")
-      addTag()(tag.textContent)
+
+      let sons = document.querySelectorAll(".jobitem--card");
       
-      for(let i = 0; i<father.children.length;i++){
-        if(sons[i].innerText.includes(tag.textContent) === true){
-          console.log(sons[i].innerText.includes(tag.textContent))
-          sons[i].style.display = "flex"
-        }else{
-          sons[i].style.display = "none"
+      addTag()(tag.textContent)
+      query.push(tag.textContent)
+
+
+      const filterElements = () => {
+
+        for(let i = 0; i<father.children.length;i++){
+          let k = 0;
+          if(query.length == 0){
+            sons[i].style.display = "flex"
+            tagsHeader.style.display = 'none'
+          }
+          for(let j = 0; j < query.length; j++){
+            if(sons[i].innerText.includes(query[j])== true){
+              k++
+              if( k == query.length){
+                sons[i].style.display = "flex"
+              }
+              
+            }else {
+              sons[i].style.display = "none"
+            }
+          }
+          
         }
       }
+      filterElements()
+
+      //actualiza los cambios efectuado al filtro de busqueda
+      document.querySelectorAll(".btn").forEach(btn => {
+        let btnContent = btn.parentElement.textContent
+        btn.addEventListener("click", function(){
+          btn.parentElement.remove()
+        query.splice(query.indexOf(btnContent.slice(0,btnContent.length-1),1))
+        filterElements()
+        })
+      })
+
+
+
     })
   })
 
 },1000)
-//usar margin para posicionar la barra de tags
+
+
+//si un valor se vuelve a precionar no debe ser admitido en el query
+//cuando se elimina un valor que no es el que se introducido mas inmedia se bacia todo el el contenedor
