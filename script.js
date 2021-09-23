@@ -35,7 +35,7 @@ const removeContent = (x,y,z) => {
 
 let data = fetchData().then( a => {
     a.forEach(element => {
-       // console.log(element.company)
+    
        let newSection = document.createElement("section")
 
 
@@ -86,18 +86,23 @@ setTimeout(function(){
 
       let sons = document.querySelectorAll(".jobitem--card");
       
-      addTag()(tag.textContent)
-      query.push(tag.textContent)
+      if(query.includes(tag.textContent) == false){
+        addTag()(tag.textContent)
+        query.push(tag.textContent)
+      }
+
 
 
       const filterElements = () => {
-
+        
         for(let i = 0; i<father.children.length;i++){
           let k = 0;
           if(query.length == 0){
             sons[i].style.display = "flex"
             tagsHeader.style.display = 'none'
+            
           }
+
           for(let j = 0; j < query.length; j++){
             if(sons[i].innerText.includes(query[j])== true){
               k++
@@ -115,11 +120,17 @@ setTimeout(function(){
       filterElements()
 
       //actualiza los cambios efectuado al filtro de busqueda
+      //update the search parameters
       document.querySelectorAll(".btn").forEach(btn => {
+
         let btnContent = btn.parentElement.textContent
+
         btn.addEventListener("click", function(){
+
           btn.parentElement.remove()
-        query.splice(query.indexOf(btnContent.slice(0,btnContent.length-1),1))
+        
+          query = [...query].filter(a => a !== btnContent.slice(0,btnContent.length-1))
+
         filterElements()
         })
       })
@@ -130,7 +141,3 @@ setTimeout(function(){
   })
 
 },1000)
-
-
-//si un valor se vuelve a precionar no debe ser admitido en el query
-//cuando se elimina un valor que no es el que se introducido mas inmedia se bacia todo el el contenedor
