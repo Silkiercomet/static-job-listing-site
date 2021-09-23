@@ -52,7 +52,7 @@ let data = fetchData().then( a => {
             <small class="name">${element.company}</small><span class="new">${element.new}</span>
             <span class="featured">${element.featured}</span>
           </div>
-          <h1 class="role">${element.position}"</h1>
+          <h1 class="role">${element.position}</h1>
           <dl class="requirements">
             <dt class="time">${element.postedAt}</dt>
             <dt class="role-time">${element.contract}</dt>
