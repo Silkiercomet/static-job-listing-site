@@ -1,5 +1,8 @@
 let father = document.querySelector("main"),
-tagsHeader = document.querySelector(".selected--tags")
+tagsHeader = document.querySelector(".selected--tags"),
+clearQuery = document.querySelector(".clear")
+
+
 async function fetchData(){
     try{
         let response = await fetch(`data.json`);
@@ -32,7 +35,7 @@ const removeContent = (x,y,z) => {
 
 };
 
-
+//fetch the data from the JSON file and prints it in the users screen
 let data = fetchData().then( a => {
     a.forEach(element => {
     
@@ -81,6 +84,7 @@ let data = fetchData().then( a => {
 //the sort function for the selected tags
 setTimeout(function(){
   let query = []
+
   document.querySelectorAll(".tag").forEach(tag => {
     tag.addEventListener("click",function(){
 
@@ -114,10 +118,15 @@ setTimeout(function(){
               sons[i].style.display = "none"
             }
           }
-          
         }
       }
+
+
+
+
       filterElements()
+
+
 
       //actualiza los cambios efectuado al filtro de busqueda
       //update the search parameters
@@ -135,6 +144,11 @@ setTimeout(function(){
         })
       })
 
+      clearQuery.addEventListener("click", function(){
+        query = []
+        document.querySelectorAll(".btn").forEach(btn => btn.parentElement.remove())
+        filterElements()
+      })
 
 
     })
