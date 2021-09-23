@@ -207,6 +207,11 @@ main {
 }
 .role {
   color: var(--VeryDarkGrayishCyan);
+  transition: 300ms ease-in-out;
+  cursor: pointer;
+}
+.role:hover {
+  color: var(--DesaturatedDarkCyan);
 }
 .requirements {
   display: flex;
